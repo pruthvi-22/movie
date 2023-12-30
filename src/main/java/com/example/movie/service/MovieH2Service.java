@@ -17,7 +17,7 @@ public class MovieH2Service implements MovieRepository {
 
     @Override
     public ArrayList<Movie> getAllMovies() {
-        List<Movie> movieLists = jdbcTemplate.query("select * from movielist", new MovieRowMapper());
+        List<Movie> movieLists = jdbcTemplate.query("select * from MOVIELIST", new MovieRowMapper());
         ArrayList<Movie> movies = new ArrayList<>(movieLists);
         return movies;
     }
@@ -25,7 +25,7 @@ public class MovieH2Service implements MovieRepository {
     @Override
     public Movie getMovieById(int movieId) {
         try {
-            return jdbcTemplate.queryForObject("select * from movielist where movieId=?", new MovieRowMapper(),
+            return jdbcTemplate.queryForObject("select * from MOVIELIST where movieId=?", new MovieRowMapper(),
                     movieId);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -34,9 +34,9 @@ public class MovieH2Service implements MovieRepository {
 
     @Override
     public Movie addMovie(Movie movie) {
-        jdbcTemplate.update("insert into movielist(movieName, leadActor) values(?, ?)",
+        jdbcTemplate.update("insert into MOVIELIST(movieName, leadActor) values(?, ?)",
                 movie.getMovieName(), movie.getLeadActor());
-        Movie savedMovie = jdbcTemplate.queryForObject("select * from movielist where movieName=? and leadActor=?",
+        Movie savedMovie = jdbcTemplate.queryForObject("select * from MOVIELIST where movieName=? and leadActor=?",
                 new MovieRowMapper(), movie.getMovieName(), movie.getLeadActor());
         return savedMovie;
     }
@@ -44,16 +44,16 @@ public class MovieH2Service implements MovieRepository {
     @Override
     public Movie updateMovie(int movieId, Movie movie) {
         if (movie.getMovieName() != null) {
-            jdbcTemplate.update("update movielist set movieName=? where movieId=?", movie.getMovieName(), movieId);
+            jdbcTemplate.update("update MOVIELISTset movieName=? where movieId=?", movie.getMovieName(), movieId);
         }
         if (movie.getLeadActor() != null) {
-            jdbcTemplate.update("update movielist set leadActor=? where movieId=?", movie.getLeadActor(), movieId);
+            jdbcTemplate.update("update MOVIELIST set leadActor=? where movieId=?", movie.getLeadActor(), movieId);
         }
         return getMovieById(movieId);
     }
 
     @Override
     public void deleteMovie(int movieId) {
-        jdbcTemplate.update("delete from movielist where movieId=?", movieId);
+        jdbcTemplate.update("delete from MOVIELIST where movieId=?", movieId);
     }
 }
